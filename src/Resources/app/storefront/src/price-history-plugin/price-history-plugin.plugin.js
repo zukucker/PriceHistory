@@ -2,7 +2,7 @@ const { PluginBaseClass } = window;
 
 export default class PriceHistoryPlugin extends PluginBaseClass {
     init() {
-        console.log('History Plugin loaded');
+        console.error('History Plugin loaded');
 
         this.button = this.el.children['ajax-button'];
         this.textdiv = this.el.children['ajax-display'];
@@ -15,9 +15,10 @@ export default class PriceHistoryPlugin extends PluginBaseClass {
         this.button.onclick = this._fetch.bind(this);
     }
 
-    _fetch() {
-        const response = await fetch('/price_history/price_change/' + this.id, this._setContent.bind(this), 'application/json', true);
+    async _fetch() {
+        const response = await fetch('/price_history/price_change/' + this.id);
         const data = await response.json();
+        console.error(data);
     }
 
     _setContent(data) {

@@ -15,7 +15,7 @@
   "extra": {
     "shopware-plugin-class": "PriceHistory\\PriceHistory",
     "label": {
-      "de-DE": "Price Historie",
+      "de-DE": "Preis Historie",
       "en-GB": "Price History"
     }
   }
