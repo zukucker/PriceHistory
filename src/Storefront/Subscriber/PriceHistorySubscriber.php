@@ -16,11 +16,17 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class PriceHistorySubscriber implements EventSubscriberInterface
 {
     private EntityRepository $priceHistoryRepository;
-    private Entityrepository $productRepository;
+    private EntityRepository $purchasePriceHistoryRepository;
+    private EntityRepository $productRepository;
 
-    public function __construct(EntityRepository $priceHistoryRepository, EntityRepository $productRepository)
+    public function __construct(
+        EntityRepository $priceHistoryRepository, 
+        EntityRepository $purchasePriceHistoryRepository, 
+        EntityRepository $productRepository
+    )
     {
         $this->priceHistoryRepository = $priceHistoryRepository;
+        $this->purchasePriceHistoryRepository = $purchasePriceHistoryRepository;
         $this->productRepository = $productRepository;
     }
 
@@ -41,7 +47,7 @@ class PriceHistorySubscriber implements EventSubscriberInterface
         $this->writeHistory($context, $ids);
     }
 
-    private function writeHistory(Context $context, array $ids): void
+    private function writeHistory(Context $context, array $ids, bool $vk = true): void
     {
         foreach ($ids as $id) {
             $productCriteria = new Criteria();
@@ -49,12 +55,32 @@ class PriceHistorySubscriber implements EventSubscriberInterface
             $product = $this->productRepository->search($productCriteria, $context)->first();
             $currentId = $product->getId();
             $currentPrice = $this->collectionToArray($product->getPrice());
+    
+
+
             $historyCriteria = new Criteria();
             $historyCriteria->addFilter(new EqualsFilter('productId', $currentId));
             $historyCriteria->addSorting(new FieldSorting('changeDate', 'DESC'));
             $historyCriteria->setLimit(1);
             $lastHistoryItem = $this->priceHistoryRepository->search($historyCriteria, $context)->first();
             $oldPrice = $lastHistoryItem ? $this->collectionToArray($lastHistoryItem->getNewPrice()) : [];
+
+            if($vk){
+                $currentPurchasePrices = $this->collectionToArray($product->getPurchasePrices());
+                $lastPurchasePrices = $this->purchasePriceHistoryRepository->search($historyCriteria, $context)->first();
+                $oldPurchasePrice = $lastPurchasePrices ? $this->collectionToArray($lastHistoryItem->getNewPrice()) : [];
+                if ($currentPurchasePrices !== $oldPurchasePrice) {
+                    $this->purchasePriceHistoryRepository->create([
+                        [
+                            'id' => Uuid::randomHex(),
+                            'productId' => $currentId,
+                            'oldPrice' => $lastPurchasePrices ? $oldPurchasePrice : $currentPurchasePrices,
+                            'newPrice' => $currentPurchasePrices,
+                        ],
+                    ], $context);
+                }
+            }
+
             if ($currentPrice !== $oldPrice) {
                 $this->priceHistoryRepository->create([
                     [

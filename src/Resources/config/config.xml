@@ -10,5 +10,9 @@
             <name>showInStorefront</name>
             <label>Show in storefront</label>
         </input-field>
+        <input-field type="bool">
+            <name>ekActive</name>
+            <label>Trigger bei Einkaufspreisen</label>
+        </input-field>
     </card>
 </config>
