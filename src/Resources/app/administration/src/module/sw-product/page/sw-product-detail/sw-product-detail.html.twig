@@ -1,0 +1,8 @@
+{% block sw_product_detail_content_tabs_additional %}
+    {% parent %}
+    {% block sw_product_detail_content_tabs_price_history %}
+        <sw-tabs-item :route="{ name: 'price.history', params: { id: $route.params.id } }" title="Preisentwicklung">
+            Preisentwicklung
+        </sw-tabs-item> 
+    {% endblock %}
+{% endblock %}
