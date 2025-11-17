@@ -9,14 +9,14 @@ use Shopware\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
+use Shopware\Core\PlatformRequest;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Shopware\Storefront\Framework\Routing\StorefrontRouteScope;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route(defaults={"_routeScope"={"storefront"}})
- */
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StorefrontRouteScope::ID]])]
 class PriceHistoryController extends AbstractController
 {
     private EntityRepository $priceHistoryRepository;
@@ -32,9 +32,9 @@ class PriceHistoryController extends AbstractController
      * @param string $productId
      * @param Context $context
      * @return JsonResponse
-     *
-     * @Route("/price_history/price_change/{productId}", name="frontend.price_history.price_change", defaults={"XmlHttpRequest"=true}, methods={"GET"})
      */
+
+    #[Route(path: '/price_history/price_change/{productId}', name: 'frontend.price_history.price_change', methods: ['GET'], defaults: ['XmlHttpRequest' => 'true'])]
     public function priceChange(string $productId, Context $context): JsonResponse
     {
         if (!$this->systemConfigService->get('PriceHistory.config.showInStorefront')) {

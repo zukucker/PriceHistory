@@ -1,10 +1,8 @@
-import HttpClient from 'src/service/http-client.service';
-import Plugin from 'src/plugin-system/plugin.class';
+const { PluginBaseClass } = window;
 
-export default class PriceHistoryPlugin extends Plugin {
+export default class PriceHistoryPlugin extends PluginBaseClass {
     init() {
         console.log('History Plugin loaded');
-        this._client = new HttpClient();
 
         this.button = this.el.children['ajax-button'];
         this.textdiv = this.el.children['ajax-display'];
@@ -18,7 +16,8 @@ export default class PriceHistoryPlugin extends Plugin {
     }
 
     _fetch() {
-        this._client.get('/price_history/price_change/' + this.id, this._setContent.bind(this), 'application/json', true);
+        const response = await fetch('/price_history/price_change/' + this.id, this._setContent.bind(this), 'application/json', true);
+        const data = await response.json();
     }
 
     _setContent(data) {
