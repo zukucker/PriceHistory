@@ -1,0 +1,23 @@
+{
+  "base": "/bundles/pricehistory/administration/",
+  "entryPoints": {
+    "price-history": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/pricehistory/administration/assets/price-history-C2eEexnP.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}

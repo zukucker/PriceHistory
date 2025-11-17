@@ -1,0 +1,71 @@
+<div>
+    <sw-card title="Preisentwicklung">
+        <div class="custom-chart-page">
+            <sw-chart
+                    :type="'line'"
+                    :series="[
+                             {
+                             name: 'Preis',
+                             data:products
+                             },
+                             ]"
+                    :options="{
+                              title: {
+                                  text: 'Verkaufspreis'
+                              },
+                              xaxis: {
+                                  type: 'datetime',
+                                  min: minimum,
+                                  {#max: 1559952000000#}
+                              },
+                              yaxis: {
+                                  min:0,
+                                  tickAmount:3,
+                                  labels:{
+                                      formatter: (value) => { 
+                                          return value
+                                      }
+                                  }
+                              }
+                              }"
+                    :fillEmptyValues="day"
+                    :sort="true">
+            </sw-chart>
+            <sw-chart
+                    :type="'line'"
+                    :series="[
+                             {
+                             name: 'Preis',
+                             data:[
+                             {x:1559426400000, y:7.50},
+                             {x:1559512800000, y:12.30},
+                             {x:1559772000000, y:11.20},
+                             {x:1559599200000, y:10.25},
+                             {x:1559685600000, y:8.99},
+                             ]},
+                             ]"
+                    :options="{
+                              title: {
+                                  text: 'Einkaufspreis'
+                              },
+                              xaxis: {
+                                  type: 'datetime',
+                                  min: 1559426400000,
+                                  {#max: 1559952000000#}
+                              },
+                              yaxis: {
+                                  min:0,
+                                  tickAmount:3,
+                                  labels:{
+                                      formatter: (value) => { 
+                                          return value
+                                      }
+                                  }
+                              }
+                              }"
+                    :fillEmptyValues="day"
+                    :sort="true">
+            </sw-chart>
+        </div>
+    </sw-card>
+</div>

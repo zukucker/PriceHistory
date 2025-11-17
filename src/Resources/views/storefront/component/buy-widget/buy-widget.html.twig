@@ -1,0 +1,12 @@
+{% sw_extends '@Storefront/storefront/component/buy-widget/buy-widget.html.twig' %}
+
+{% block buy_widget_price %}
+    {{ parent() }}
+    {% set history = config('PriceHistory.config.showInStorefront') %}
+    {% if history %}
+        <div data-price-history-plugin>
+            <button id="ajax-button" class="btn btn-primary btn-block" value="{{ page.product.id }}">Price History</button>
+            <div id="ajax-display"></div>
+        </div>
+    {% endif %}
+{% endblock %}
